@@ -11,8 +11,8 @@ import os
 load_dotenv()
 
 # Set up the Streamlit app
-st.title("Scholarship Matcher with Gemini AI 🎓")
-st.caption("This app scans for scholarships matching a student's profile")
+st.title("Scholarship Matcher with  AI 🎓")
+st.caption("This app uses AI to scans for scholarships matching a student's profile")
 
 # Get Gemini API key from .env file
 gemini_api_key = os.getenv("GEMINI_API_KEY")
