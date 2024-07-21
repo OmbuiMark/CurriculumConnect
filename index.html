@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curriculum Connect</title>
+  <style>
+    body{
+      background-image: url('bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+   #outputArea {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    input, select {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    #outputArea {
+      margin-top: 20px;
+      text-align: left;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    #outputArea pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .logo {
+      width: 180px; /* Adjust width as needed */
+      height: auto; /* Maintain aspect ratio */
+      margin-bottom: 10px; /* Add margin to separate logo from loader */
+    }
+
+
+
+    .loader {
+     
+      border: 2px solid #f3f3f3; /* Further reduced border size */
+      border-radius: 50%;
+      border-top: 2px solid blue; /* Further reduced border size */
+      border-bottom: 2px solid blue; /* Further reduced border size */
+      width: 15px; /* Further reduced width */
+      height: 15px; /* Further reduced height */
+      -webkit-animation: spin .5s linear infinite;
+      animation: spin .5s linear infinite;
+      display: none; /* Hide loader by default */
+    }
+
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  /* Media Query for phones */
+  
+  @media only screen and (max-width: 600px) {
+  body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .container {
+    width: 70%;
+  
+    padding: 10px;
+    box-shadow: none;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  input, select, button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  input, select {
+    margin-bottom: 15px;
+  }
+
+  button {
+    margin-bottom: 15px;
+    padding: 15px;
+  }
+
+  #outputArea {
+    margin-top: 20px;
+    text-align: left;
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  .logo {
+    width: 50px;
+    margin-bottom: 20px;
+  }
+}
+
+
+      
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>
+      <img src="logo.png" alt="Logo" class="logo">
+  
+    </div>
+    <h1>Curriculum Connect </h1>
+    <input type="text" id="inputField" placeholder="Enter Cluster">
+ 
+    
+    <select id="programCountSelect">
+      <option value="5">5 programs</option>
+      <option value="10">10 programs</option>
+      <option value="15">15 programs</option>
+      <option value="20">20 programs</option>
+    </select>
+    <select id="fieldSelect">
+      <option value="">All fields</option>
+      <option value="engineering">Engineering</option>
+      <option value="medicine">Medicine</option>
+      <option value="campus">Campus programs</option>
+    </select>
+    <select id="institutionSelect">
+      <option value="">All institutions</option>
+      <option value="EGERTON UNIVERSITY">EGERTON UNIVERSITY</option>
+      <option value="KISII UNIVERSITY">KISII UNIVERSITY</option>
+      <option value="PWANI UNIVERSITY">PWANI UNIVERSITY</option>
+      <option value="JOMO KENYATTA UNIVERSITY OF AGRICULTURE AND TECHNOLOGY">JOMO KENYATTA UNIVERSITY OF AGRICULTURE AND TECHNOLOGY</option>
+      <option value="TECHNICAL UNIVERSITY OF MOMBASA">TECHNICAL UNIVERSITY OF MOMBASA</option>
+      <option value="KENYATTA UNIVERSITY">KENYATTA UNIVERSITY</option>
+      <option value="TECHNICAL UNIVERSITY OF KENYA">TECHNICAL UNIVERSITY OF KENYA</option>
+      <option value="MACHAKOS UNIVERSITY">MACHAKOS UNIVERSITY</option>
+      <option value="DEDAN KIMATHI UNIVERSITY OF TECHNOLOGY">DEDAN KIMATHI UNIVERSITY OF TECHNOLOGY</option>
+      <option value="UNIVERSITY OF NAIROBI">UNIVERSITY OF NAIROBI</option>
+      <option value="MULTIMEDIA UNIVERSITY OF KENYA">MULTIMEDIA UNIVERSITY OF KENYA</option>
+    </select>
+    <button id="submitBtn" style="background-color: #ff6849;">Search</button>
+    <button id="refreshBtn"  style="background-color: #4c5667; ">Refresh</button>
+   
+  
+
+    <div id="outputArea">
+      <div class="loader" id="loader"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const inputField = document.getElementById('inputField');
+ 
+    const programCountSelect = document.getElementById('programCountSelect');
+    const fieldSelect = document.getElementById('fieldSelect');
+    const institutionSelect = document.getElementById('institutionSelect');
+    const submitBtn = document.getElementById('submitBtn');
+    const outputArea = document.getElementById('outputArea');
+    const refreshBtn = document.getElementById('refreshBtn');
+   
+    async function query(data) {
+      const response = await fetch(
+      "https://api.stack-ai.com/inference/v0/run/fe547a83-8225-4488-a8c7-3c284e35d86a/665eb7c58d1c1ad411784743",
+      {
+          headers: {'Authorization':
+			 'Bearer b10c888b-41f6-402a-ab2d-7eabc70db7b5',
+			 'Content-Type': 'application/json'
+		},
+          method: "POST",
+          body: JSON.stringify(data),
+      }
+      );
+      const result = await response.json();
+      return result;
+    }
+
+    submitBtn.addEventListener('click', async () => {
+
+      submitBtn.style.display = 'none';
+      var loader = document.getElementById('loader');
+      loader.style.display = 'block';
+
+      setTimeout(function() {
+        loader.style.display = 'none';
+        
+      }, 2000); 
+
+
+      refreshBtn.addEventListener('click', async () => {
+        location.reload();
+      });
+
+
+      const input = inputField.value;
+      const userId = 1;
+      const programCount = programCountSelect.value;
+      const field = fieldSelect.value;
+      const institution = institutionSelect.value;
+      const data = { "in-0": `${input} show ${programCount} ${field ? field : ''} ${institution ? `programs at ${institution}` : 'programs'}`, "user_id": userId };
+
+      try {
+        const response = await query(data);
+        const outputText = response.outputs["out-0"];
+        outputArea.innerHTML = `<pre>${outputText}</pre>`;
+      } catch (error) {
+        outputArea.textContent = `Error: ${error.message}`;
+      }
+      
+     
+    });
+  </script>
+</body>
+</html>
